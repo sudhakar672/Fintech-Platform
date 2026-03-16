@@ -1,4 +1,4 @@
-# PulseFinance Analytics Platform
+# PulseFinance Analytics Platform - Sudhakar A
 
 A complete, production-grade FinTech Analytics Platform built with pure HTML, CSS, and JavaScript.
 
