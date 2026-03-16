@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Watchlist — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    .watchlist-layout { display:grid; grid-template-columns:1fr 360px; gap:14px; }
+    .watch-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:16px 18px; display:flex; align-items:center; gap:14px; cursor:pointer; transition:all 0.15s; }
+    .watch-card:hover { border-color:var(--color-border-2); transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+    .watch-card.selected { border-color:var(--color-accent); background:var(--color-accent-dim); }
+    .wc-logo { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content: center; font-weight:700; font-size:12px; color:#fff; flex-shrink:0; }
+    .wc-name { font-size:14px; font-weight:500; color:var(--color-text); }
+    .wc-sym  { font-family:var(--font-mono); font-size:11px; color:var(--color-text-3); }
+    .wc-price { font-family:var(--font-mono); font-size:16px; font-weight:600; color:var(--color-text); margin-left:auto; text-align:right; }
+    .wc-chg { font-family:var(--font-mono); font-size:12px; }
+    .watch-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .alert-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:14px 16px; }
+    .alert-sym { font-family:var(--font-mono); font-weight:700; font-size:13px; color:var(--color-text); }
+    .alert-cond { font-size:12.5px; color:var(--color-text-2); margin-top:3px; }
+    .alert-meta { font-size:11px; font-family:var(--font-mono); color:var(--color-text-3); margin-top:4px; }
+    .alert-toggle { width:32px; height:18px; background:var(--color-green); border-radius:9px; position:relative; cursor:pointer; margin-left:auto; flex-shrink:0; }
+    .alert-toggle::after { content:''; position:absolute; top:2px; right:2px; width:14px; height:14px; background:#fff; border-radius:50%; }
+    @media(max-width:1100px){.watchlist-layout{grid-template-columns:1fr;} .watch-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio</a>
+        <a href="markets.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>Markets</a>
+        <a href="trading.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7-7 7 7"/></svg>Trade Desk</a>
+        <a href="orders.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Orders</a>
+        <a href="watchlist.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Watchlist</a>
+        <a href="analytics.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div><div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst</span></div></div></div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left"><div class="breadcrumb"><span class="breadcrumb-root">PulseFinance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="breadcrumb-current">Watchlist</span></div></div>
+      <div class="topbar-right"><div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div><button class="topbar-btn topbar-btn--ghost">+ Add Symbol</button></div>
+    </header>
+    <div class="page-content">
+      <div class="watchlist-layout">
+        <div>
+          <div class="panel-header" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin-bottom:0">
+            <h2 class="panel-title">My Watchlist <span style="font-size:12px;color:var(--color-text-3);font-family:var(--font-mono);font-weight:400;margin-left:6px">8 symbols</span></h2>
+            <button class="panel-action-btn">Edit List</button>
+          </div>
+          <div style="background:var(--color-surface);border:1px solid var(--color-border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);overflow:hidden;" id="watchCards"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="data-panel">
+            <div class="panel-header"><h2 class="panel-title">Price Alerts</h2><button class="panel-action-btn">+ New Alert</button></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:10px;" id="alertCards"></div>
+          </div>
+          <div class="chart-panel">
+            <div class="panel-header"><h2 class="panel-title">Quick Chart</h2><span style="font-size:12px;font-family:var(--font-mono);color:var(--color-text-3);" id="quickSym">AAPL</span></div>
+            <div class="chart-container"><canvas id="quickChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <footer class="dashboard-footer" style="margin-top:20px;"><div class="footer-right"><button class="footer-theme-btn" id="themeToggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg> Light Mode</button></div></footer>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    const WATCH = [
+      {name:'Apple Inc.',    sym:'AAPL', price:'$193.42',chg:'+1.24%',pos:true, color:'#718096'},
+      {name:'NVIDIA',        sym:'NVDA', price:'$875.90',chg:'+3.45%',pos:true, color:'#48bb78'},
+      {name:'Microsoft',     sym:'MSFT', price:'$419.85',chg:'+0.87%',pos:true, color:'#63b3ed'},
+      {name:'Tesla',         sym:'TSLA', price:'$182.63',chg:'-1.87%',pos:false,color:'#fc8181'},
+      {name:'Meta Platforms',sym:'META', price:'$509.44',chg:'+1.03%',pos:true, color:'#667eea'},
+      {name:'Amazon',        sym:'AMZN', price:'$199.12',chg:'+2.14%',pos:true, color:'#f6ad55'},
+      {name:'Bitcoin',       sym:'BTC',  price:'$67,420',chg:'+2.91%',pos:true, color:'#f6ad55'},
+      {name:'Ethereum',      sym:'ETH',  price:'$3,281', chg:'+1.54%',pos:true, color:'#b794f4'},
+    ];
+    const ALERTS = [
+      {sym:'NVDA',cond:'Price above $900',meta:'Created 2h ago · Active',on:true},
+      {sym:'TSLA',cond:'Price below $175',meta:'Created 4h ago · Active',on:true},
+      {sym:'AAPL',cond:'RSI(14) above 70',meta:'Created 1d ago · Active',on:false},
+      {sym:'BTC', cond:'Price above $70,000',meta:'Created 3d ago · Active',on:true},
+    ];
+    let quickChartInst = null;
+    function buildQuickChart(sym) {
+      const canvas = document.getElementById('quickChart');
+      if (quickChartInst) quickChartInst.destroy();
+      document.getElementById('quickSym').textContent = sym;
+      const labels = PF.genLabels('1D');
+      const prices = PF.genTimeSeries(labels.length, 180, 1.5, 0.04);
+      quickChartInst = new Chart(canvas, {
+        type:'line', data:{labels, datasets:[{data:prices,borderColor:'#63b3ed',borderWidth:2,fill:true,backgroundColor:function(ctx){const g=ctx.chart.ctx.createLinearGradient(0,0,0,200);g.addColorStop(0,'rgba(99,179,237,0.15)');g.addColorStop(1,'rgba(99,179,237,0.01)');return g;},tension:0.4,pointRadius:0}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a2540',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,titleColor:'#4d5d7a',bodyColor:'#e8eef8',titleFont:{family:'DM Mono',size:11},bodyFont:{family:'DM Mono',size:12}}},scales:{x:{display:false},y:{grid:{color:'rgba(255,255,255,0.05)',drawBorder:false},ticks:{color:'#4d5d7a',font:{family:'DM Mono',size:11},callback:v=>'$'+v.toFixed(0)}}}}
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      PF.startClock(); PF.initTheme();
+      document.getElementById('watchCards').innerHTML = WATCH.map((w,i) => `
+        <div class="watch-card${i===0?' selected':''}" onclick="selectWatch(this,'${w.sym}')" style="border-radius:0;border-left:none;border-right:none;border-top:${i>0?'1px solid var(--color-border)':'none'};border-bottom:none">
+          <div class="wc-logo" style="background:${w.color}22;color:${w.color}">${w.sym.slice(0,2)}</div>
+          <div><div class="wc-name">${w.name}</div><div class="wc-sym">${w.sym}</div></div>
+          <div class="wc-price">${w.price}<br><span class="wc-chg ${w.pos?'text-green':'text-red'}">${w.chg}</span></div>
+        </div>`).join('');
+      document.getElementById('alertCards').innerHTML = ALERTS.map(a => `
+        <div class="alert-card">
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="flex:1"><div class="alert-sym">${a.sym}</div><div class="alert-cond">${a.cond}</div><div class="alert-meta">${a.meta}</div></div>
+            <div class="alert-toggle" style="background:${a.on?'var(--color-green)':'var(--color-border-2)'};"></div>
+          </div>
+        </div>`).join('');
+      buildQuickChart('AAPL');
+    });
+    function selectWatch(el, sym) {
+      document.querySelectorAll('.watch-card').forEach(c=>c.classList.remove('selected'));
+      el.classList.add('selected');
+      buildQuickChart(sym);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+    .stat-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:16px 18px; }
+    .stat-label { font-size:11px; font-family:var(--font-mono); color:var(--color-text-3); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px; }
+    .stat-value { font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--color-text); }
+    .stat-note { font-size:11.5px; font-family:var(--font-mono); color:var(--color-text-3); margin-top:4px; }
+    .analytics-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr;}.analytics-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio</a>
+        <a href="markets.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>Markets</a>
+        <a href="analytics.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div><div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst</span></div></div></div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left"><div class="breadcrumb"><span class="breadcrumb-root">PulseFinance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="breadcrumb-current">Analytics</span></div></div>
+      <div class="topbar-right"><div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div></div>
+    </header>
+    <div class="page-content">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Sharpe Ratio</div><div class="stat-value">2.41</div><div class="stat-note">vs 1.92 benchmark</div></div>
+        <div class="stat-card"><div class="stat-label">Sortino Ratio</div><div class="stat-value">3.18</div><div class="stat-note">Downside-adjusted</div></div>
+        <div class="stat-card"><div class="stat-label">Max Drawdown</div><div class="stat-value" style="color:var(--color-red)">−8.42%</div><div class="stat-note">Oct 2023 correction</div></div>
+        <div class="stat-card"><div class="stat-label">Calmar Ratio</div><div class="stat-value">2.74</div><div class="stat-note">Return / Max DD</div></div>
+        <div class="stat-card"><div class="stat-label">Alpha</div><div class="stat-value" style="color:var(--color-green)">+1.87%</div><div class="stat-note">vs S&P 500</div></div>
+        <div class="stat-card"><div class="stat-label">Beta</div><div class="stat-value">0.87</div><div class="stat-note">Market sensitivity</div></div>
+        <div class="stat-card"><div class="stat-label">Correlation</div><div class="stat-value">0.74</div><div class="stat-note">vs S&P 500</div></div>
+        <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-value" style="color:var(--color-green)">68.4%</div><div class="stat-note">Last 90 trades</div></div>
+      </div>
+      <div class="analytics-grid">
+        <div class="chart-panel">
+          <div class="panel-header"><h2 class="panel-title">Monthly Returns</h2><div class="panel-subtitle">% return by month</div></div>
+          <div class="chart-container"><canvas id="monthlyChart"></canvas></div>
+        </div>
+        <div class="chart-panel">
+          <div class="panel-header"><h2 class="panel-title">Return Distribution</h2><div class="panel-subtitle">Frequency of daily returns</div></div>
+          <div class="chart-container"><canvas id="distChart"></canvas></div>
+        </div>
+      </div>
+      <footer class="dashboard-footer" style="margin-top:20px;"><div class="footer-right"><button class="footer-theme-btn" id="themeToggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg> Light Mode</button></div></footer>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      PF.startClock(); PF.initTheme();
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const returns = [2.1,-0.8,3.4,1.9,-1.2,2.8,4.1,-0.4,1.7,3.2,-0.6,2.9];
+      new Chart(document.getElementById('monthlyChart'), {
+        type:'bar', data:{ labels:months, datasets:[{
+          data:returns,
+          backgroundColor:returns.map(v=>v>=0?'rgba(72,187,120,0.7)':'rgba(252,129,129,0.7)'),
+          borderWidth:0, borderRadius:4
+        }]},
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y.toFixed(2)+'%'}}},
+          scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4d5d7a',font:{family:'DM Mono'}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4d5d7a',font:{family:'DM Mono'},callback:v=>v+'%'}}}}
+      });
+      const bins = ['-4%','-3%','-2%','-1%','0%','+1%','+2%','+3%','+4%'];
+      const freq = [2,4,8,22,35,28,16,7,3];
+      new Chart(document.getElementById('distChart'), {
+        type:'bar', data:{ labels:bins, datasets:[{data:freq,backgroundColor:'rgba(99,179,237,0.6)',borderWidth:0,borderRadius:4}]},
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+          scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4d5d7a',font:{family:'DM Mono'}}},y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#4d5d7a',font:{family:'DM Mono'}}}}}
+      });
+    });
+  </script>
+</body>
+</html>

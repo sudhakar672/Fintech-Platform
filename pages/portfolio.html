@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');</style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-label">Overview</span>
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio<span class="nav-badge nav-badge--green">+3.2%</span></a>
+        <a href="markets.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Markets</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Trading</span>
+        <a href="trading.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7-7 7 7"/></svg>Trade Desk</a>
+        <a href="orders.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Orders</a>
+        <a href="analytics.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user"><div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div><div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst · Pro</span></div></div>
+    </div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left"><div class="breadcrumb"><span class="breadcrumb-root">PulseFinance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="breadcrumb-current">Portfolio</span></div></div>
+      <div class="topbar-right">
+        <div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div>
+        <button class="topbar-btn topbar-btn--primary" onclick="alert('Trade modal — see main dashboard')">+ New Trade</button>
+      </div>
+    </header>
+    <div class="page-content">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+        <div class="metric-hero-card metric-hero-card--primary"><div class="metric-hero-label">Portfolio Value</div><div class="metric-hero-value">$4,827,340</div><div class="metric-hero-change metric-hero-change--up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> +3.27% today</div><div class="metric-hero-bg-text">NET</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Total Invested</div><div class="metric-hero-value">$3,924,100</div><div class="metric-hero-change metric-hero-change--neutral"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg> Cost basis</div><div class="metric-hero-bg-text">INV</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Total Return</div><div class="metric-hero-value metric-hero-value--green">+$903,240</div><div class="metric-hero-change metric-hero-change--up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> +23.02% all time</div><div class="metric-hero-bg-text">RTN</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Cash Available</div><div class="metric-hero-value">$241,820</div><div class="metric-hero-change metric-hero-change--neutral"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg> 4.78% of portfolio</div><div class="metric-hero-bg-text">$$$</div></div>
+      </div>
+      <div class="data-panel" style="margin-bottom:20px;">
+        <div class="panel-header">
+          <div class="panel-header-left"><h2 class="panel-title">All Positions</h2><div class="panel-subtitle">12 open positions · Sorted by value</div></div>
+          <div class="panel-header-right">
+            <button class="panel-action-btn">Export CSV</button>
+            <button class="panel-action-btn">Rebalance</button>
+          </div>
+        </div>
+        <div class="holdings-table-wrap">
+          <table class="holdings-table"><thead><tr><th>Asset</th><th>Type</th><th class="th-right">Price</th><th class="th-right">Change</th><th class="th-right">Shares</th><th class="th-right">Weight</th><th class="th-right">Value</th><th class="th-right">P&L</th><th class="th-right">Signal</th></tr></thead><tbody id="portfolioTbody"></tbody></table>
+        </div>
+      </div>
+      <footer class="dashboard-footer"><div class="footer-right"><button class="footer-theme-btn" id="themeToggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg> Light Mode</button></div></footer>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      PF.startClock(); PF.initTheme();
+      const tbody = document.getElementById('portfolioTbody');
+      if (tbody) {
+        tbody.innerHTML = PF.HOLDINGS.map(h => {
+          const pnl = Math.round(h.value * (Math.random() * 0.3 - 0.05));
+          const shares = Math.round(h.value / h.price);
+          return `<tr><td><div class="asset-cell"><div class="asset-logo" style="background:${h.color}20;color:${h.color}">${h.ticker.slice(0,2)}</div><div><div class="asset-name">${h.name}</div><span class="asset-ticker">${h.ticker}</span></div></div></td><td><span class="asset-type-badge type--${h.type}">${h.type}</span></td><td class="price-cell">$${h.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td class="change-cell"><span class="change-pill change-pill--${h.pos?'up':'dn'}">${h.pos?'▲':'▼'} ${Math.abs(h.chg).toFixed(2)}%</span></td><td class="price-cell">${shares.toLocaleString()}</td><td class="price-cell">${h.weight}%</td><td class="price-cell">$${h.value.toLocaleString()}</td><td class="price-cell ${pnl>=0?'text-green':'text-red'}">${pnl>=0?'+':''}$${Math.abs(pnl).toLocaleString()}</td><td class="signal-cell"><span class="signal-badge signal--${h.signal}">${h.signal.toUpperCase()}</span></td></tr>`;
+        }).join('');
+      }
+    });
+  </script>
+</body>
+</html>

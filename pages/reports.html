@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    .reports-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+    .report-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:20px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+    .report-card:hover { border-color:var(--color-accent); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+    .report-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .report-card--blue::before { background:linear-gradient(90deg,var(--color-accent),var(--color-purple)); }
+    .report-card--green::before { background:linear-gradient(90deg,var(--color-green),var(--color-teal)); }
+    .report-card--amber::before { background:linear-gradient(90deg,var(--color-amber),var(--color-red)); }
+    .report-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:14px; }
+    .report-icon--blue  { background:var(--color-accent-dim); }
+    .report-icon--green { background:var(--color-green-dim); }
+    .report-icon--amber { background:var(--color-amber-dim); }
+    .report-name { font-family:var(--font-display); font-size:15px; font-weight:600; color:var(--color-text); margin-bottom:6px; }
+    .report-desc { font-size:12.5px; color:var(--color-text-3); line-height:1.5; margin-bottom:14px; }
+    .report-meta { display:flex; align-items:center; justify-content:space-between; font-size:11.5px; font-family:var(--font-mono); color:var(--color-text-3); }
+    .report-gen-btn { font-size:12px; padding:5px 12px; border-radius:var(--radius-sm); background:var(--color-accent-dim); color:var(--color-accent); border:1px solid rgba(99,179,237,0.2); transition:all 0.15s; }
+    .report-gen-btn:hover { background:rgba(99,179,237,0.2); }
+    .schedule-item { display:flex; align-items:center; gap:12px; padding:14px 20px; border-bottom:1px solid var(--color-border); }
+    .schedule-item:last-child { border-bottom:none; }
+    .schedule-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .sched-name { font-size:13.5px; font-weight:500; color:var(--color-text); }
+    .sched-freq { font-size:12px; font-family:var(--font-mono); color:var(--color-text-3); margin-top:2px; }
+    .sched-next { margin-left:auto; font-size:12px; font-family:var(--font-mono); color:var(--color-text-2); text-align:right; }
+    .sched-status { font-size:10.5px; font-family:var(--font-mono); padding:2px 8px; border-radius:var(--radius-full); }
+    .sched-status--active { background:var(--color-green-dim); color:var(--color-green); }
+    .sched-status--paused { background:var(--color-amber-dim); color:var(--color-amber); }
+    @media(max-width:900px){ .reports-grid { grid-template-columns:1fr 1fr; } }
+    @media(max-width:600px){ .reports-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-label">Overview</span>
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio</a>
+        <a href="markets.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Markets</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Trading</span>
+        <a href="trading.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7-7 7 7"/></svg>Trade Desk</a>
+        <a href="orders.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Orders</a>
+        <a href="watchlist.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Watchlist</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Analytics</span>
+        <a href="analytics.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+        <a href="risk.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Risk Matrix</a>
+        <a href="reports.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Reports</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div>
+        <div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst · Pro</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="breadcrumb">
+          <span class="breadcrumb-root">PulseFinance</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="breadcrumb-current">Reports</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div>
+        <button class="topbar-btn topbar-btn--primary" onclick="PF.showToast('Generating all reports...','info')">⬇ Export All</button>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- REPORT CARDS -->
+      <div class="reports-grid">
+        <div class="report-card report-card--blue" onclick="PF.showToast('Generating Portfolio Summary...','success',2500)">
+          <div class="report-icon report-icon--blue">📊</div>
+          <div class="report-name">Portfolio Summary</div>
+          <div class="report-desc">Complete overview of holdings, performance metrics, P&L breakdown, and asset allocation by sector and geography.</div>
+          <div class="report-meta">
+            <span>Last: Today 09:00 AM</span>
+            <button class="report-gen-btn">Generate ↗</button>
+          </div>
+        </div>
+        <div class="report-card report-card--green" onclick="PF.showToast('Generating Performance Report...','success',2500)">
+          <div class="report-icon report-icon--green">📈</div>
+          <div class="report-name">Performance Report</div>
+          <div class="report-desc">Detailed returns analysis vs benchmark, Sharpe ratio, alpha/beta, drawdown analysis, and rolling statistics.</div>
+          <div class="report-meta">
+            <span>Last: Yesterday 4:30 PM</span>
+            <button class="report-gen-btn">Generate ↗</button>
+          </div>
+        </div>
+        <div class="report-card report-card--amber" onclick="PF.showToast('Generating Risk Assessment...','info',2500)">
+          <div class="report-icon report-icon--amber">⚠️</div>
+          <div class="report-name">Risk Assessment</div>
+          <div class="report-desc">VaR analysis, stress testing results, concentration risk, market exposure, and tail risk scenarios.</div>
+          <div class="report-meta">
+            <span>Last: Mon 4:00 PM</span>
+            <button class="report-gen-btn">Generate ↗</button>
+          </div>
+        </div>
+        <div class="report-card report-card--blue" onclick="PF.showToast('Generating Trade Report...','success',2500)">
+          <div class="report-icon report-icon--blue">🔄</div>
+          <div class="report-name">Trade Activity</div>
+          <div class="report-desc">Complete trade history, execution quality analysis, slippage report, and commission breakdown for the period.</div>
+          <div class="report-meta">
+            <span>Last: Today 09:31 AM</span>
+            <button class="report-gen-btn">Generate ↗</button>
+          </div>
+        </div>
+        <div class="report-card report-card--green" onclick="PF.showToast('Generating Tax Report...','success',2500)">
+          <div class="report-icon report-icon--green">🧾</div>
+          <div class="report-name">Tax Report (YTD)</div>
+          <div class="report-desc">Realized gains/losses, wash sale adjustments, dividend income, and estimated tax liability for the current year.</div>
+          <div class="report-meta">
+            <span>Last: Jan 1 (YTD)</span>
+            <button class="report-gen-btn">Generate ↗</button>
+          </div>
+        </div>
+        <div class="report-card report-card--amber" onclick="PF.showToast('Generating Compliance Report...','info',2500)">
+          <div class="report-icon report-icon--amber">🛡️</div>
+          <div class="report-name">Compliance Report</div>
+          <div class="report-desc">Regulatory compliance summary, position limits review, large trader reporting, and audit trail export.</div>
+          <div class="report-meta">
+            <span>Last: Fri 6:00 PM</span>
+            <button class="report-gen-btn">Generate ↗</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCHEDULED REPORTS + RECENT -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+
+        <div class="data-panel">
+          <div class="panel-header">
+            <div class="panel-header-left"><h2 class="panel-title">Scheduled Reports</h2><div class="panel-subtitle">Automated delivery</div></div>
+            <button class="panel-action-btn" onclick="PF.showToast('Schedule editor coming soon','info')">+ Add Schedule</button>
+          </div>
+          <div id="scheduleList">
+            <div class="schedule-item">
+              <div class="schedule-dot" style="background:var(--color-green)"></div>
+              <div><div class="sched-name">Daily Portfolio Summary</div><div class="sched-freq">Every trading day · 4:30 PM EST</div></div>
+              <div class="sched-next">Tomorrow<br><span style="font-size:10px;color:var(--color-text-3)">4:30 PM</span></div>
+              <span class="sched-status sched-status--active">Active</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-dot" style="background:var(--color-green)"></div>
+              <div><div class="sched-name">Weekly Performance</div><div class="sched-freq">Every Friday · 6:00 PM EST</div></div>
+              <div class="sched-next">Friday<br><span style="font-size:10px;color:var(--color-text-3)">6:00 PM</span></div>
+              <span class="sched-status sched-status--active">Active</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-dot" style="background:var(--color-green)"></div>
+              <div><div class="sched-name">Monthly Risk Report</div><div class="sched-freq">1st of month · 8:00 AM EST</div></div>
+              <div class="sched-next">Apr 1<br><span style="font-size:10px;color:var(--color-text-3)">8:00 AM</span></div>
+              <span class="sched-status sched-status--active">Active</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-dot" style="background:var(--color-amber)"></div>
+              <div><div class="sched-name">Quarterly Tax Summary</div><div class="sched-freq">End of quarter · 9:00 AM EST</div></div>
+              <div class="sched-next">Jul 1<br><span style="font-size:10px;color:var(--color-text-3)">9:00 AM</span></div>
+              <span class="sched-status sched-status--paused">Paused</span>
+            </div>
+            <div class="schedule-item">
+              <div class="schedule-dot" style="background:var(--color-green)"></div>
+              <div><div class="sched-name">Compliance Audit Trail</div><div class="sched-freq">Every Friday · 5:00 PM EST</div></div>
+              <div class="sched-next">Friday<br><span style="font-size:10px;color:var(--color-text-3)">5:00 PM</span></div>
+              <span class="sched-status sched-status--active">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="data-panel">
+          <div class="panel-header">
+            <div class="panel-header-left"><h2 class="panel-title">Recent Deliveries</h2><div class="panel-subtitle">Last 7 days</div></div>
+            <button class="panel-action-btn">View Archive →</button>
+          </div>
+          <div id="recentList">
+            <div class="schedule-item">
+              <div class="activity-icon activity-icon--buy" style="font-size:11px;min-width:34px">PDF</div>
+              <div><div class="sched-name">Daily Portfolio Summary</div><div class="sched-freq">Today · 4:30 PM · 2.4 MB</div></div>
+              <button class="panel-action-btn" onclick="PF.showToast('Downloading report...','success')">⬇</button>
+            </div>
+            <div class="schedule-item">
+              <div class="activity-icon activity-icon--news" style="font-size:11px;min-width:34px">XLS</div>
+              <div><div class="sched-name">Trade Activity Export</div><div class="sched-freq">Today · 9:31 AM · 0.8 MB</div></div>
+              <button class="panel-action-btn" onclick="PF.showToast('Downloading report...','success')">⬇</button>
+            </div>
+            <div class="schedule-item">
+              <div class="activity-icon activity-icon--buy" style="font-size:11px;min-width:34px">PDF</div>
+              <div><div class="sched-name">Weekly Performance</div><div class="sched-freq">Fri Mar 15 · 6:00 PM · 3.1 MB</div></div>
+              <button class="panel-action-btn" onclick="PF.showToast('Downloading report...','success')">⬇</button>
+            </div>
+            <div class="schedule-item">
+              <div class="activity-icon activity-icon--alert" style="font-size:11px;min-width:34px">PDF</div>
+              <div><div class="sched-name">Compliance Audit Trail</div><div class="sched-freq">Fri Mar 15 · 5:00 PM · 1.2 MB</div></div>
+              <button class="panel-action-btn" onclick="PF.showToast('Downloading report...','success')">⬇</button>
+            </div>
+            <div class="schedule-item">
+              <div class="activity-icon activity-icon--buy" style="font-size:11px;min-width:34px">PDF</div>
+              <div><div class="sched-name">Daily Portfolio Summary</div><div class="sched-freq">Thu Mar 14 · 4:30 PM · 2.3 MB</div></div>
+              <button class="panel-action-btn" onclick="PF.showToast('Downloading report...','success')">⬇</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="dashboard-footer" style="margin-top:20px;">
+        <div class="footer-right">
+          <button class="footer-theme-btn" id="themeToggle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
+            Light Mode
+          </button>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      PF.startClock();
+      PF.initTheme();
+    });
+  </script>
+</body>
+</html>

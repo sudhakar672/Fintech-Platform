@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risk Matrix — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    .risk-layout { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .risk-matrix { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+    .risk-cell { height:64px; border-radius:var(--radius-md); display:flex;flex-direction:column; align-items:center; justify-content:center; cursor:default; transition:all 0.2s; }
+    .risk-cell:hover { filter:brightness(1.2); transform:scale(1.04); }
+    .rc-label { font-family:var(--font-mono); font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+    .rc-score { font-family:var(--font-display); font-size:18px; font-weight:700; }
+    .var-table { width:100%; border-collapse:collapse; }
+    .var-table th { font-size:10px; font-family:var(--font-mono); color:var(--color-text-3); text-transform:uppercase; letter-spacing:0.8px; padding:8px 14px; text-align:left; border-bottom:1px solid var(--color-border); }
+    .var-table td { padding:10px 14px; font-size:13px; border-bottom:1px solid rgba(255,255,255,0.04); }
+    .var-table tr:last-child td { border-bottom:none; }
+    .scenario-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:16px 18px; cursor:default; transition:all 0.2s; }
+    .scenario-card:hover { border-color:var(--color-border-2); }
+    .sc-name { font-size:13.5px; font-weight:600; font-family:var(--font-display); color:var(--color-text); }
+    .sc-impact { font-family:var(--font-display); font-size:22px; font-weight:700; margin:6px 0; }
+    .sc-desc { font-size:12px; color:var(--color-text-3); }
+    .scenarios-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    @media(max-width:1100px){.risk-layout{grid-template-columns:1fr;} .scenarios-grid{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio</a>
+        <a href="markets.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>Markets</a>
+        <a href="analytics.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+        <a href="risk.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Risk Matrix</a>
+        <a href="reports.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Reports</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div><div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst</span></div></div></div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left"><div class="breadcrumb"><span class="breadcrumb-root">PulseFinance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="breadcrumb-current">Risk Matrix</span></div></div>
+      <div class="topbar-right"><div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div></div>
+    </header>
+    <div class="page-content">
+      <!-- KPIs -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+        <div class="metric-hero-card metric-hero-card--primary"><div class="metric-hero-label">Overall Risk Score</div><div class="metric-hero-value" style="color:var(--color-green)">34/100</div><div class="metric-hero-change metric-hero-change--up">▲ LOW RISK</div><div class="metric-hero-bg-text">R</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">VaR (95%, 1-Day)</div><div class="metric-hero-value" style="color:var(--color-red)">-$48,200</div><div class="metric-hero-change metric-hero-change--neutral">—&nbsp;-1.0% of AUM</div><div class="metric-hero-bg-text">VaR</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">CVaR (Expected Shortfall)</div><div class="metric-hero-value" style="color:var(--color-red)">-$72,400</div><div class="metric-hero-change metric-hero-change--neutral">—&nbsp;Tail risk measure</div><div class="metric-hero-bg-text">CVaR</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Max Drawdown</div><div class="metric-hero-value" style="color:var(--color-red)">-8.42%</div><div class="metric-hero-change metric-hero-change--neutral">—&nbsp;Oct 2023</div><div class="metric-hero-bg-text">DD</div></div>
+      </div>
+      <div class="risk-layout" style="margin-bottom:20px;">
+        <div class="data-panel">
+          <div class="panel-header"><h2 class="panel-title">Risk Heatmap</h2><div class="panel-subtitle">Score 0–100 per category</div></div>
+          <div style="padding:16px;"><div class="risk-matrix" id="riskMatrix"></div></div>
+        </div>
+        <div class="data-panel">
+          <div class="panel-header"><h2 class="panel-title">VaR by Asset</h2><div class="panel-subtitle">95% confidence · 1-day</div></div>
+          <div><table class="var-table" id="varTable"><thead><tr><th>Asset</th><th>Weight</th><th style="text-align:right">VaR (1D)</th><th style="text-align:right">VaR %</th></tr></thead><tbody id="varTbody"></tbody></table></div>
+        </div>
+      </div>
+      <!-- STRESS TESTS -->
+      <div class="data-panel" style="margin-bottom:20px;">
+        <div class="panel-header"><h2 class="panel-title">Stress Test Scenarios</h2><div class="panel-subtitle">Historical & hypothetical scenarios</div></div>
+        <div style="padding:16px;"><div class="scenarios-grid" id="scenariosGrid"></div></div>
+      </div>
+      <footer class="dashboard-footer"><div class="footer-right"><button class="footer-theme-btn" id="themeToggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg> Light Mode</button></div></footer>
+    </div>
+  </main>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    const RISK_CELLS = [
+      {label:'Market',   score:32,color:'#48bb78',bg:'rgba(72,187,120,0.12)'},
+      {label:'Credit',   score:18,color:'#48bb78',bg:'rgba(72,187,120,0.08)'},
+      {label:'Liquidity',score:24,color:'#f6ad55',bg:'rgba(246,173,85,0.12)'},
+      {label:'Currency', score:41,color:'#f6ad55',bg:'rgba(246,173,85,0.15)'},
+      {label:'Volatility',score:28,color:'#48bb78',bg:'rgba(72,187,120,0.10)'},
+    ];
+    const SCENARIOS = [
+      {name:'2020 COVID Crash',impact:'-34.2%',val:'-$1.65M',severity:'high',desc:'March 2020 market shock, 33-day drawdown'},
+      {name:'2008 Financial Crisis',impact:'-52.1%',val:'-$2.51M',severity:'high',desc:'Global financial meltdown scenario'},
+      {name:'2022 Rate Hike Cycle',impact:'-18.4%',val:'-$887K',severity:'med',desc:'Fed rapid rate increase, tech selloff'},
+      {name:'Flash Crash +10%',impact:'+8.2%',val:'+$396K',severity:'low',desc:'Rapid market recovery scenario'},
+      {name:'Crypto Winter',impact:'-42.8%',val:'-$2.06M',severity:'high',desc:'2022-style crypto bear market'},
+      {name:'Soft Landing',impact:'+12.4%',val:'+$598K',severity:'low',desc:'Fed achieves soft landing, rally continues'},
+    ];
+    function severityColor(s) {
+      if (s==='high') return {c:'var(--color-red)',b:'var(--color-red-dim)'};
+      if (s==='med')  return {c:'var(--color-amber)',b:'var(--color-amber-dim)'};
+      return {c:'var(--color-green)',b:'var(--color-green-dim)'};
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      PF.startClock(); PF.initTheme();
+      document.getElementById('riskMatrix').innerHTML = RISK_CELLS.map(r=>`
+        <div class="risk-cell" style="background:${r.bg}">
+          <div class="rc-label" style="color:${r.color}">${r.label}</div>
+          <div class="rc-score" style="color:${r.color}">${r.score}</div>
+        </div>`).join('');
+      document.getElementById('varTbody').innerHTML = PF.HOLDINGS.slice(0,8).map(h=>{
+        const varPct = (Math.random()*2+0.5).toFixed(2);
+        const varVal = Math.round(h.value*parseFloat(varPct)/100);
+        return `<tr><td><strong style="font-family:var(--font-mono)">${h.ticker}</strong></td><td>${h.weight}%</td><td style="text-align:right;font-family:var(--font-mono);color:var(--color-red)">-$${varVal.toLocaleString()}</td><td style="text-align:right;font-family:var(--font-mono);color:var(--color-red)">-${varPct}%</td></tr>`;
+      }).join('');
+      const col = severityColor;
+      document.getElementById('scenariosGrid').innerHTML = SCENARIOS.map(s=>{
+        const {c,b}=col(s.severity);
+        const isPos = s.impact.startsWith('+');
+        return `<div class="scenario-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+            <div class="sc-name">${s.name}</div>
+            <span style="font-size:10px;font-family:var(--font-mono);padding:2px 8px;border-radius:var(--radius-full);background:${b};color:${c}">${s.severity.toUpperCase()}</span>
+          </div>
+          <div class="sc-impact" style="color:${isPos?'var(--color-green)':'var(--color-red)'}">${s.impact}</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:${isPos?'var(--color-green)':'var(--color-red)'};">${s.val}</div>
+          <div class="sc-desc" style="margin-top:8px">${s.desc}</div>
+        </div>`;
+      }).join('');
+    });
+  </script>
+</body>
+</html>

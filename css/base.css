@@ -1,0 +1,44 @@
+/* BASE STYLES */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.35s cubic-bezier(0.4,0,0.2,1), color 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); font-weight: 600; line-height: 1.2; color: var(--color-text); }
+a { color: var(--color-accent); text-decoration: none; transition: opacity 0.12s ease; }
+a:hover { opacity: 0.8; }
+button { font-family: var(--font-body); cursor: pointer; border: none; outline: none; background: none; }
+input, select, textarea { font-family: var(--font-body); }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-surface-3); border-radius: 9999px; }
+::selection { background: var(--color-accent-dim); color: var(--color-accent); }
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, black 40%, transparent 100%);
+  opacity: 0.6;
+}
+.bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.07; animation: orb-float 20s ease-in-out infinite; }
+.orb-1 { width: 600px; height: 600px; background: var(--color-accent); top: -200px; left: -100px; }
+.orb-2 { width: 500px; height: 500px; background: var(--color-purple); top: 50%; right: -100px; animation-delay: -7s; }
+.orb-3 { width: 400px; height: 400px; background: var(--color-teal); bottom: -100px; left: 40%; animation-delay: -14s; }
+@keyframes orb-float {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-30px) scale(1.05); }
+  66% { transform: translate(-20px,20px) scale(0.97); }
+}
+.mono { font-family: var(--font-mono); }
+.text-green { color: var(--color-green); }
+.text-red { color: var(--color-red); }
+.text-amber { color: var(--color-amber); }
+.text-muted { color: var(--color-text-2); }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

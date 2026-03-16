@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    .order-status { font-size:10.5px;font-family:var(--font-mono);padding:3px 8px;border-radius:var(--radius-full);font-weight:500; }
+    .status--filled { background:var(--color-green-dim);color:var(--color-green); }
+    .status--pending { background:var(--color-amber-dim);color:var(--color-amber); }
+    .status--cancelled { background:var(--color-surface-2);color:var(--color-text-3); }
+    .status--partial { background:var(--color-accent-dim);color:var(--color-accent); }
+    .cancel-btn { font-size:11px;font-family:var(--font-mono);padding:3px 8px;border-radius:5px;border:1px solid var(--color-border-2);color:var(--color-text-3);transition:all 0.15s; }
+    .cancel-btn:hover { background:var(--color-red-dim);color:var(--color-red);border-color:rgba(252,129,129,0.3); }
+    .filter-row { display:flex;gap:8px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--color-border);flex-wrap:wrap; }
+    .filter-select { background:var(--color-bg-3);border:1px solid var(--color-border-2);border-radius:var(--radius-md);padding:6px 12px;font-size:12.5px;font-family:var(--font-mono);color:var(--color-text-2);outline:none; }
+    .filter-select:focus { border-color:var(--color-accent); }
+  </style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-label">Overview</span>
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio</a>
+        <a href="markets.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>Markets</a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Trading</span>
+        <a href="trading.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7-7 7 7"/></svg>Trade Desk</a>
+        <a href="orders.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Orders<span class="nav-dot nav-dot--pulse"></span></a>
+        <a href="watchlist.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Watchlist</a>
+        <a href="analytics.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div><div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst · Pro</span></div></div></div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left"><div class="breadcrumb"><span class="breadcrumb-root">PulseFinance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="breadcrumb-current">Orders</span></div></div>
+      <div class="topbar-right"><div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div><button class="topbar-btn topbar-btn--primary" onclick="window.location.href='trading.html'">+ New Order</button></div>
+    </header>
+    <div class="page-content">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
+        <div class="metric-hero-card metric-hero-card--primary"><div class="metric-hero-label">Total Orders Today</div><div class="metric-hero-value">24</div><div class="metric-hero-change metric-hero-change--up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> +6 vs yesterday</div><div class="metric-hero-bg-text">ORD</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Filled</div><div class="metric-hero-value" style="color:var(--color-green)">19</div><div class="metric-hero-change metric-hero-change--up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> 79.2% fill rate</div><div class="metric-hero-bg-text">FLD</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Pending</div><div class="metric-hero-value" style="color:var(--color-amber)">3</div><div class="metric-hero-change metric-hero-change--neutral"><span>Awaiting execution</span></div><div class="metric-hero-bg-text">PND</div></div>
+        <div class="metric-hero-card"><div class="metric-hero-label">Cancelled</div><div class="metric-hero-value" style="color:var(--color-text-3)">2</div><div class="metric-hero-change metric-hero-change--neutral"><span>Today</span></div><div class="metric-hero-bg-text">CXL</div></div>
+      </div>
+
+      <div class="data-panel">
+        <div class="panel-header">
+          <div class="panel-header-left"><h2 class="panel-title">Order History</h2><div class="panel-subtitle">Today · All accounts</div></div>
+          <div class="panel-header-right"><button class="panel-action-btn">Export</button></div>
+        </div>
+        <div class="filter-row">
+          <select class="filter-select" id="statusFilter" onchange="filterOrders()"><option value="all">All Status</option><option value="filled">Filled</option><option value="pending">Pending</option><option value="cancelled">Cancelled</option></select>
+          <select class="filter-select" id="sideFilter" onchange="filterOrders()"><option value="all">All Sides</option><option value="buy">Buy</option><option value="sell">Sell</option></select>
+          <select class="filter-select" id="typeFilter" onchange="filterOrders()"><option value="all">All Types</option><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select>
+        </div>
+        <div class="holdings-table-wrap">
+          <table class="holdings-table">
+            <thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Type</th><th class="th-right">Qty</th><th class="th-right">Price</th><th class="th-right">Filled</th><th class="th-right">Total</th><th class="th-right">Status</th><th></th></tr></thead>
+            <tbody id="ordersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="toast-container" id="toastContainer"></div>
+      <footer class="dashboard-footer" style="margin-top:20px;"><div class="footer-right"><button class="footer-theme-btn" id="themeToggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg> Light Mode</button></div></footer>
+    </div>
+  </main>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    const ORDERS = [
+      {time:'09:31:42',sym:'NVDA',side:'buy',type:'market',qty:50,price:875.90,filled:50,status:'filled'},
+      {time:'09:28:17',sym:'AAPL',side:'sell',type:'limit',qty:100,price:193.42,filled:100,status:'filled'},
+      {time:'09:15:03',sym:'MSFT',side:'buy',type:'market',qty:25,price:419.85,filled:25,status:'filled'},
+      {time:'09:10:00',sym:'TSLA',side:'sell',type:'stop',qty:50,price:182.00,filled:0,status:'pending'},
+      {time:'09:05:21',sym:'META',side:'buy',type:'limit',qty:20,price:505.00,filled:20,status:'filled'},
+      {time:'08:58:44',sym:'AMZN',side:'buy',type:'market',qty:30,price:199.12,filled:30,status:'filled'},
+      {time:'08:45:33',sym:'BTC',side:'buy',type:'market',qty:0.5,price:67200,filled:0.5,status:'filled'},
+      {time:'08:40:12',sym:'GOOGL',side:'sell',type:'stop',qty:200,price:174.23,filled:200,status:'filled'},
+      {time:'08:30:00',sym:'VOO',side:'buy',type:'limit',qty:10,price:490.00,filled:0,status:'pending'},
+      {time:'08:22:09',sym:'NVDA',side:'buy',type:'limit',qty:25,price:860.00,filled:0,status:'pending'},
+      {time:'08:15:55',sym:'AAPL',side:'buy',type:'limit',qty:50,price:190.00,filled:0,status:'cancelled'},
+      {time:'08:00:30',sym:'ETH',side:'buy',type:'market',qty:2,price:3280,filled:2,status:'filled'},
+    ];
+
+    let filtered = [...ORDERS];
+
+    window.filterOrders = function() {
+      const s = document.getElementById('statusFilter').value;
+      const side = document.getElementById('sideFilter').value;
+      const type = document.getElementById('typeFilter').value;
+      filtered = ORDERS.filter(o =>
+        (s==='all'||o.status===s) &&
+        (side==='all'||o.side===side) &&
+        (type==='all'||o.type===type||('stop'===type&&o.type==='stop'))
+      );
+      renderOrders();
+    };
+
+    function renderOrders() {
+      const tb = document.getElementById('ordersTbody');
+      tb.innerHTML = filtered.map(o => {
+        const total = (o.filled * o.price).toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2});
+        const fillPct = o.qty > 0 ? ((o.filled/o.qty)*100).toFixed(0)+'%' : '—';
+        const isCancellable = o.status==='pending';
+        return `<tr>
+          <td style="font-family:var(--font-mono);font-size:12.5px;color:var(--color-text-3)">${o.time}</td>
+          <td><strong style="font-family:var(--font-mono)">${o.sym}</strong></td>
+          <td><span class="change-pill change-pill--${o.side==='buy'?'up':'dn'}" style="font-size:10.5px">${o.side.toUpperCase()}</span></td>
+          <td style="font-family:var(--font-mono);font-size:12.5px;text-transform:capitalize">${o.type}</td>
+          <td style="font-family:var(--font-mono);text-align:right">${o.qty}</td>
+          <td class="price-cell">$${o.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
+          <td style="font-family:var(--font-mono);text-align:right;color:var(--color-text-3)">${fillPct}</td>
+          <td style="font-family:var(--font-mono);text-align:right">${o.filled>0?total:'—'}</td>
+          <td style="text-align:right"><span class="order-status status--${o.status}">${o.status.charAt(0).toUpperCase()+o.status.slice(1)}</span></td>
+          <td>${isCancellable?`<button class="cancel-btn" onclick="cancelOrder('${o.sym}','${o.time}')">Cancel</button>`:''}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    window.cancelOrder = function(sym, time) {
+      const idx = ORDERS.findIndex(o=>o.sym===sym&&o.time===time);
+      if (idx>=0) { ORDERS[idx].status='cancelled'; filterOrders(); PF.showToast('Order cancelled: '+sym,'info'); }
+    };
+
+    document.addEventListener('DOMContentLoaded',function(){ PF.startClock(); PF.initTheme(); renderOrders(); });
+  </script>
+</body>
+</html>

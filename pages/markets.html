@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markets — PulseFinance</title>
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../css/components.css" />
+  <link rel="stylesheet" href="../css/charts.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    .market-grid { display: grid; grid-template-columns: repeat(3,1fr); gap:14px; }
+    .market-card { background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:18px 20px; transition:all 0.2s; cursor:default; }
+    .market-card:hover { border-color:var(--color-border-2); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+    .market-card-name { font-family:var(--font-display); font-size:15px; font-weight:600; margin-bottom:4px; }
+    .market-card-sym { font-family:var(--font-mono); font-size:11px; color:var(--color-text-3); }
+    .market-card-price { font-family:var(--font-mono); font-size:24px; font-weight:600; margin:12px 0 6px; }
+    .market-card-stats { display:flex; gap:16px; flex-wrap:wrap; margin-top:10px; }
+    .mcs { font-size:11.5px; font-family:var(--font-mono); }
+    .mcs-label { color:var(--color-text-3); display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.6px; }
+    .heat-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:4px; }
+    .heat-cell { border-radius:6px; padding:10px 8px; cursor:default; transition:all 0.15s; }
+    .heat-cell:hover { filter:brightness(1.2); }
+    .heat-sym { font-family:var(--font-mono); font-size:11px; font-weight:600; }
+    .heat-chg { font-family:var(--font-mono); font-size:10px; margin-top:2px; }
+    @media(max-width:1200px){.market-grid{grid-template-columns:1fr 1fr;} .heat-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(max-width:700px){.market-grid{grid-template-columns:1fr;} .heat-grid{grid-template-columns:repeat(3,1fr);}}
+  </style>
+</head>
+<body class="theme-dark">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="14" r="2" fill="currentColor"/><circle cx="3" cy="17" r="2" fill="currentColor"/></svg></div>
+      <div class="brand-text"><span class="brand-name">PulseFinance</span><span class="brand-version">v3.1 · Enterprise</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <a href="../index.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+        <a href="portfolio.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Portfolio</a>
+        <a href="markets.html" class="nav-item active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Markets</a>
+        <a href="analytics.html" class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar"><span>AK</span><div class="user-status-dot"></div></div><div class="user-info"><span class="user-name">Alex Kim</span><span class="user-role">Senior Analyst</span></div></div></div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-left"><div class="breadcrumb"><span class="breadcrumb-root">PulseFinance</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span class="breadcrumb-current">Markets</span></div></div>
+      <div class="topbar-right"><div class="topbar-time"><div class="live-indicator"><span class="live-dot"></span><span>LIVE</span></div><span class="topbar-clock" id="topbarClock">--:--:-- EST</span></div></div>
+    </header>
+    <div class="page-content">
+      <div class="market-grid" style="margin-bottom:20px;" id="marketCards"></div>
+      <div class="data-panel" style="margin-bottom:20px;">
+        <div class="panel-header"><h2 class="panel-title">Market Heatmap</h2><div class="panel-subtitle">S&P 500 sectors · by daily change</div></div>
+        <div style="padding:16px;"><div class="heat-grid" id="heatGrid"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="data-panel">
+          <div class="panel-header"><h2 class="panel-title">Top Gainers</h2></div>
+          <div id="gainers"></div>
+        </div>
+        <div class="data-panel">
+          <div class="panel-header"><h2 class="panel-title">Top Losers</h2></div>
+          <div id="losers"></div>
+        </div>
+      </div>
+      <footer class="dashboard-footer" style="margin-top:20px;"><div class="footer-right"><button class="footer-theme-btn" id="themeToggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg> Light Mode</button></div></footer>
+    </div>
+  </main>
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    const INDICES = [
+      {name:'S&P 500',sym:'SPX',price:'5,234.18',chg:'+0.41%',pos:true,open:'5,212.40',high:'5,248.90',low:'5,208.12',vol:'2.3B'},
+      {name:'NASDAQ 100',sym:'NDX',price:'16,820.54',chg:'+0.63%',pos:true,open:'16,715.20',high:'16,890.44',low:'16,700.00',vol:'1.8B'},
+      {name:'Dow Jones',sym:'DJI',price:'38,790.43',chg:'+0.28%',pos:true,open:'38,681.20',high:'38,840.10',low:'38,620.00',vol:'890M'},
+      {name:'Russell 2000',sym:'RUT',price:'2,041.56',chg:'-0.18%',pos:false,open:'2,045.20',high:'2,052.80',low:'2,035.40',vol:'420M'},
+      {name:'VIX',sym:'VIX',price:'13.82',chg:'-5.20%',pos:false,open:'14.56',high:'14.80',low:'13.61',vol:'—'},
+      {name:'10Y Treasury',sym:'TNX',price:'4.321%',chg:'+0.04',pos:false,open:'4.281%',high:'4.345%',low:'4.275%',vol:'—'},
+    ];
+    const HEAT = [
+      {sym:'XLK',name:'Technology',chg:1.24},{sym:'XLF',name:'Financials',chg:0.38},{sym:'XLV',name:'Healthcare',chg:-0.12},
+      {sym:'XLE',name:'Energy',chg:-0.64},{sym:'XLI',name:'Industrial',chg:0.55},{sym:'XLY',name:'Consumer D.',chg:0.91},
+      {sym:'XLP',name:'Consumer S.',chg:-0.08},{sym:'XLB',name:'Materials',chg:0.29},{sym:'XLRE',name:'Real Estate',chg:-0.44},
+      {sym:'XLU',name:'Utilities',chg:-0.19},{sym:'XLC',name:'Comm. Svcs',chg:1.42},{sym:'GLD',name:'Gold',chg:0.28},
+    ];
+    const MOVERS = [
+      {name:'NVDA',chg:3.45,pos:true},{name:'META',chg:2.81,pos:true},{name:'AMZN',chg:2.14,pos:true},
+      {name:'BTC',chg:2.91,pos:true},{name:'AAPL',chg:1.24,pos:true},{name:'XLC',chg:1.42,pos:true},
+    ];
+    const LOSERS = [
+      {name:'TSLA',chg:-1.87,pos:false},{name:'VIX',chg:-5.20,pos:false},{name:'OIL',chg:-0.65,pos:false},
+      {name:'GOOGL',chg:-0.32,pos:false},{name:'DXY',chg:-0.12,pos:false},{name:'XLE',chg:-0.64,pos:false},
+    ];
+    function heatColor(chg) {
+      if (chg > 2) return 'background:rgba(72,187,120,0.25);color:#68d391';
+      if (chg > 0) return 'background:rgba(72,187,120,0.12);color:#48bb78';
+      if (chg < -2) return 'background:rgba(252,129,129,0.25);color:#fc8181';
+      return 'background:rgba(252,129,129,0.12);color:#fc8181';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      PF.startClock(); PF.initTheme();
+      document.getElementById('marketCards').innerHTML = INDICES.map(idx => `
+        <div class="market-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div><div class="market-card-name">${idx.name}</div><div class="market-card-sym">${idx.sym}</div></div>
+            <span class="change-pill change-pill--${idx.pos?'up':'dn'}">${idx.chg}</span>
+          </div>
+          <div class="market-card-price" style="color:var(--color-${idx.pos?'green':'red'})">${idx.price}</div>
+          <div class="market-card-stats">
+            <div class="mcs"><span class="mcs-label">Open</span>${idx.open}</div>
+            <div class="mcs"><span class="mcs-label">High</span>${idx.high}</div>
+            <div class="mcs"><span class="mcs-label">Low</span>${idx.low}</div>
+            <div class="mcs"><span class="mcs-label">Volume</span>${idx.vol}</div>
+          </div>
+        </div>`).join('');
+      document.getElementById('heatGrid').innerHTML = HEAT.map(h => `
+        <div class="heat-cell" style="${heatColor(h.chg)}">
+          <div class="heat-sym">${h.sym}</div>
+          <div class="heat-chg">${h.chg>0?'+':''}${h.chg.toFixed(2)}%</div>
+        </div>`).join('');
+      ['gainers','losers'].forEach((id, li) => {
+        const arr = li===0 ? MOVERS : LOSERS;
+        document.getElementById(id).innerHTML = arr.map(m => `
+          <div class="activity-item"><div class="activity-icon activity-icon--${m.pos?'buy':'sell'}">${m.pos?'↑':'↓'}</div>
+          <div class="activity-body"><div class="activity-title">${m.name}</div><div class="activity-meta">Today · Market</div></div>
+          <div class="activity-amount activity-amount--${m.pos?'buy':'sell'}">${m.pos?'+':''}${m.chg.toFixed(2)}%</div></div>`).join('');
+      });
+    });
+  </script>
+</body>
+</html>

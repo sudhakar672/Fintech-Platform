@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseFinance — Analytics Platform</title>
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/charts.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <!-- Fallback fonts if Google Fonts unavailable -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+  </style>
+</head>
+<body class="theme-dark">
+
+  <!-- ANIMATED BACKGROUND -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M3 17L8 12L12 16L16 10L21 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="21" cy="14" r="2" fill="currentColor"/>
+          <circle cx="3" cy="17" r="2" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">PulseFinance</span>
+        <span class="brand-version">v3.1 · Enterprise</span>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="sidebar-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search assets, reports..." class="search-input" />
+      <kbd class="search-kbd">⌘K</kbd>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-label">Overview</span>
+        <a href="index.html" class="nav-item active" data-page="dashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a href="pages/portfolio.html" class="nav-item" data-page="portfolio">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Portfolio
+          <span class="nav-badge nav-badge--green">+3.2%</span>
+        </a>
+        <a href="pages/markets.html" class="nav-item" data-page="markets">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          Markets
+          <span class="nav-badge nav-badge--red">2 Alerts</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-label">Trading</span>
+        <a href="pages/trading.html" class="nav-item" data-page="trading">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+          Trade Desk
+        </a>
+        <a href="pages/orders.html" class="nav-item" data-page="orders">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+          Orders
+          <span class="nav-dot nav-dot--pulse"></span>
+        </a>
+        <a href="pages/watchlist.html" class="nav-item" data-page="watchlist">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Watchlist
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-label">Analytics</span>
+        <a href="pages/analytics.html" class="nav-item" data-page="analytics">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Analytics
+        </a>
+        <a href="pages/risk.html" class="nav-item" data-page="risk">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Risk Matrix
+        </a>
+        <a href="pages/reports.html" class="nav-item" data-page="reports">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Reports
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="market-status">
+        <div class="market-status-dot market-status-dot--open"></div>
+        <span class="market-status-text">NYSE <strong>Open</strong></span>
+        <span class="market-status-time" id="marketTime">9:31 AM</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar">
+          <span>AK</span>
+          <div class="user-status-dot"></div>
+        </div>
+        <div class="user-info">
+          <span class="user-name">Alex Kim</span>
+          <span class="user-role">Senior Analyst · Pro</span>
+        </div>
+        <button class="user-menu-btn" aria-label="User menu">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-root">PulseFinance</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="breadcrumb-current">Dashboard</span>
+        </div>
+      </div>
+      <div class="topbar-ticker" id="tickerContainer" aria-label="Market ticker"></div>
+      <div class="topbar-right">
+        <div class="topbar-time">
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            <span>LIVE</span>
+          </div>
+          <span class="topbar-clock" id="topbarClock">--:--:-- EST</span>
+        </div>
+        <button class="topbar-btn topbar-btn--ghost" title="Notifications">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notif-badge">4</span>
+        </button>
+        <button class="topbar-btn topbar-btn--ghost" title="Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+        <button class="topbar-btn topbar-btn--primary" id="newTradeBtn" onclick="openTradeModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Trade
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-content" id="pageContent">
+
+      <!-- HERO METRICS ROW -->
+      <section class="metrics-hero">
+        <div class="metric-hero-card metric-hero-card--primary" data-animate="fade-up" data-delay="0">
+          <div class="metric-hero-label">Total Portfolio Value</div>
+          <div class="metric-hero-value" id="totalValue">$4,827,340</div>
+          <div class="metric-hero-change metric-hero-change--up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span>+$152,840 (3.27%) today</span>
+          </div>
+          <div class="metric-sparkline" id="sparkAUM"></div>
+          <div class="metric-hero-bg-text">AUM</div>
+        </div>
+
+        <div class="metric-hero-card" data-animate="fade-up" data-delay="80">
+          <div class="metric-hero-label">Daily P&L</div>
+          <div class="metric-hero-value metric-hero-value--green" id="dailyPnl">+$14,280</div>
+          <div class="metric-hero-change metric-hero-change--up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span>+0.89% vs yesterday</span>
+          </div>
+          <div class="metric-sparkline" id="sparkPnl"></div>
+          <div class="metric-hero-bg-text">P&L</div>
+        </div>
+
+        <div class="metric-hero-card" data-animate="fade-up" data-delay="160">
+          <div class="metric-hero-label">Sharpe Ratio</div>
+          <div class="metric-hero-value">2.41</div>
+          <div class="metric-hero-change metric-hero-change--down">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            <span>−0.08 vs 30-day avg</span>
+          </div>
+          <div class="metric-sparkline" id="sparkSharpe"></div>
+          <div class="metric-hero-bg-text">SR</div>
+        </div>
+
+        <div class="metric-hero-card" data-animate="fade-up" data-delay="240">
+          <div class="metric-hero-label">Win Rate</div>
+          <div class="metric-hero-value">68.4%</div>
+          <div class="metric-hero-change metric-hero-change--up">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+            <span>+2.3% this month</span>
+          </div>
+          <div class="metric-sparkline" id="sparkWin"></div>
+          <div class="metric-hero-bg-text">WIN</div>
+        </div>
+
+        <div class="metric-hero-card" data-animate="fade-up" data-delay="320">
+          <div class="metric-hero-label">Beta</div>
+          <div class="metric-hero-value">0.87</div>
+          <div class="metric-hero-change metric-hero-change--neutral">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span>vs S&P 500 benchmark</span>
+          </div>
+          <div class="metric-sparkline" id="sparkBeta"></div>
+          <div class="metric-hero-bg-text">β</div>
+        </div>
+      </section>
+
+      <!-- MAIN CHART + ALLOCATION -->
+      <section class="charts-row" data-animate="fade-up" data-delay="100">
+        <!-- PERFORMANCE CHART -->
+        <div class="chart-panel chart-panel--wide">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2 class="panel-title">Portfolio Performance</h2>
+              <div class="panel-subtitle">vs S&P 500 Benchmark</div>
+            </div>
+            <div class="panel-header-right">
+              <div class="chart-type-tabs" id="chartTypeTabs">
+                <button class="chart-type-btn active" data-type="area">Area</button>
+                <button class="chart-type-btn" data-type="line">Line</button>
+                <button class="chart-type-btn" data-type="candle">OHLC</button>
+              </div>
+              <div class="time-range-tabs" id="timeRangeTabs">
+                <button class="time-btn active" data-range="1D">1D</button>
+                <button class="time-btn" data-range="1W">1W</button>
+                <button class="time-btn" data-range="1M">1M</button>
+                <button class="time-btn" data-range="3M">3M</button>
+                <button class="time-btn" data-range="YTD">YTD</button>
+                <button class="time-btn" data-range="1Y">1Y</button>
+              </div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="perfChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-swatch" style="background: var(--color-accent)"></span> Portfolio ($4.83M)</div>
+            <div class="legend-item"><span class="legend-swatch" style="background: var(--color-muted)"></span> S&P 500 (benchmark)</div>
+            <div class="legend-item legend-item--stat"><span class="legend-label">Alpha:</span> <span class="legend-val legend-val--green">+1.87%</span></div>
+            <div class="legend-item legend-item--stat"><span class="legend-label">Correlation:</span> <span class="legend-val">0.74</span></div>
+          </div>
+        </div>
+
+        <!-- ALLOCATION DONUT -->
+        <div class="chart-panel chart-panel--narrow">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2 class="panel-title">Asset Allocation</h2>
+              <div class="panel-subtitle">By sector weight</div>
+            </div>
+            <button class="panel-action-btn" onclick="window.location.href='pages/portfolio.html'">Rebalance →</button>
+          </div>
+          <div class="donut-container">
+            <canvas id="allocChart"></canvas>
+            <div class="donut-center-label">
+              <span class="donut-val">$4.83M</span>
+              <span class="donut-sub">Total AUM</span>
+            </div>
+          </div>
+          <div class="alloc-breakdown" id="allocBreakdown"></div>
+        </div>
+      </section>
+
+      <!-- HOLDINGS + ACTIVITY -->
+      <section class="bottom-row" data-animate="fade-up" data-delay="150">
+
+        <!-- TOP HOLDINGS -->
+        <div class="data-panel data-panel--wide">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2 class="panel-title">Top Holdings</h2>
+              <div class="panel-subtitle">12 positions · Updated live</div>
+            </div>
+            <div class="panel-header-right">
+              <button class="panel-action-btn" onclick="window.location.href='pages/portfolio.html'">View All →</button>
+            </div>
+          </div>
+          <div class="holdings-table-wrap">
+            <table class="holdings-table" id="holdingsTable">
+              <thead>
+                <tr>
+                  <th class="th-sortable" data-sort="name">Asset <span class="sort-icon">↕</span></th>
+                  <th>Type</th>
+                  <th class="th-sortable th-right" data-sort="price">Price <span class="sort-icon">↕</span></th>
+                  <th class="th-sortable th-right" data-sort="change">Change <span class="sort-icon">↕</span></th>
+                  <th class="th-right">Weight</th>
+                  <th class="th-right">Value</th>
+                  <th class="th-right">Signal</th>
+                </tr>
+              </thead>
+              <tbody id="holdingsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="right-column">
+
+          <!-- RISK GAUGE -->
+          <div class="data-panel">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h2 class="panel-title">Risk Profile</h2>
+                <div class="panel-subtitle">Real-time exposure</div>
+              </div>
+              <span class="risk-badge risk-badge--low">LOW RISK</span>
+            </div>
+            <div class="risk-gauge-container">
+              <canvas id="riskGauge"></canvas>
+              <div class="risk-gauge-label">
+                <span class="risk-score">34</span>
+                <span class="risk-score-label">Risk Score</span>
+              </div>
+            </div>
+            <div class="risk-metrics" id="riskMetrics"></div>
+          </div>
+
+          <!-- QUICK STATS -->
+          <div class="data-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Market Pulse</h2>
+            </div>
+            <div class="pulse-grid" id="pulseGrid"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ACTIVITY FEED + SECTOR CHART -->
+      <section class="activity-row" data-animate="fade-up" data-delay="200">
+
+        <!-- ACTIVITY FEED -->
+        <div class="data-panel data-panel--activity">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2 class="panel-title">Live Activity</h2>
+              <span class="live-badge">
+                <span class="live-dot"></span> Live
+              </span>
+            </div>
+            <div class="panel-header-right">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="trade">Trades</button>
+              <button class="filter-btn" data-filter="alert">Alerts</button>
+            </div>
+          </div>
+          <div class="activity-list" id="activityList"></div>
+        </div>
+
+        <!-- VOLUME CHART -->
+        <div class="chart-panel chart-panel--medium">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <h2 class="panel-title">Volume Analysis</h2>
+              <div class="panel-subtitle">Intraday flow</div>
+            </div>
+          </div>
+          <div class="chart-container chart-container--sm">
+            <canvas id="volumeChart"></canvas>
+          </div>
+          <div class="vol-stats">
+            <div class="vol-stat"><span class="vol-stat-label">Buy Vol</span><span class="vol-stat-val vol-stat-val--green">$2.14M</span></div>
+            <div class="vol-stat"><span class="vol-stat-label">Sell Vol</span><span class="vol-stat-val vol-stat-val--red">$0.87M</span></div>
+            <div class="vol-stat"><span class="vol-stat-label">VWAP</span><span class="vol-stat-val">$193.12</span></div>
+            <div class="vol-stat"><span class="vol-stat-label">Flow Ratio</span><span class="vol-stat-val vol-stat-val--green">2.46×</span></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- STATUS FOOTER -->
+      <footer class="dashboard-footer">
+        <div class="footer-exchanges">
+          <div class="exchange-status exchange-status--open">
+            <span class="ex-dot"></span> NYSE <span class="ex-time">Open until 4:00 PM</span>
+          </div>
+          <div class="exchange-status exchange-status--open">
+            <span class="ex-dot"></span> NASDAQ <span class="ex-time">Open until 4:00 PM</span>
+          </div>
+          <div class="exchange-status exchange-status--pre">
+            <span class="ex-dot"></span> LSE <span class="ex-time">Pre-market 7:00 AM</span>
+          </div>
+          <div class="exchange-status exchange-status--closed">
+            <span class="ex-dot"></span> JPX <span class="ex-time">Closed · Opens 9:00 PM</span>
+          </div>
+          <div class="exchange-status exchange-status--closed">
+            <span class="ex-dot"></span> SSE <span class="ex-time">Closed · Opens 8:30 PM</span>
+          </div>
+        </div>
+        <div class="footer-right">
+          <span class="footer-data-note">Data delayed 15 min · Prices in USD · Last sync: <span id="lastSync">--:--</span></span>
+          <button class="footer-theme-btn" id="themeToggle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            Light Mode
+          </button>
+        </div>
+      </footer>
+
+    </div><!-- /page-content -->
+  </main>
+
+  <!-- TRADE MODAL -->
+  <div class="modal-overlay" id="tradeModal" onclick="closeTradeModal(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="New Trade">
+      <div class="modal-header">
+        <h3 class="modal-title">Execute Trade</h3>
+        <button class="modal-close" onclick="closeTradeModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="trade-side-toggle">
+          <button class="side-btn side-btn--buy active" id="buyBtn" onclick="setSide('buy')">BUY / LONG</button>
+          <button class="side-btn side-btn--sell" id="sellBtn" onclick="setSide('sell')">SELL / SHORT</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Symbol</label>
+            <input type="text" class="form-input" placeholder="AAPL, BTC, SPY..." id="tradeSymbol" value="AAPL" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Order Type</label>
+            <select class="form-input" id="orderType">
+              <option>Market</option>
+              <option>Limit</option>
+              <option>Stop Loss</option>
+              <option>Stop Limit</option>
+              <option>Trailing Stop</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quantity</label>
+            <input type="number" class="form-input" placeholder="100" id="tradeQty" value="50" oninput="calcTradeTotal()" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price (USD)</label>
+            <input type="number" class="form-input" placeholder="193.42" id="tradePrice" value="193.42" oninput="calcTradeTotal()" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stop Loss</label>
+            <input type="number" class="form-input" placeholder="185.00" id="tradeStop" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Take Profit</label>
+            <input type="number" class="form-input" placeholder="205.00" id="tradeTp" />
+          </div>
+        </div>
+        <div class="trade-summary" id="tradeSummary">
+          <div class="trade-summary-row"><span>Estimated Total</span><strong id="tradeTotal">$9,671.00</strong></div>
+          <div class="trade-summary-row"><span>Commission (0.05%)</span><strong id="tradeComm">$4.84</strong></div>
+          <div class="trade-summary-row trade-summary-row--total"><span>Net Cost</span><strong id="tradeNet">$9,675.84</strong></div>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn--cancel" onclick="closeTradeModal()">Cancel</button>
+          <button class="modal-btn modal-btn--submit" id="submitTradeBtn" onclick="submitTrade()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
